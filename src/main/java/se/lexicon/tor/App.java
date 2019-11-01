@@ -52,10 +52,12 @@ public class App {
 
         while (guessNumber < 8) {
 
-            boolean valid = true;
+            boolean valid;
 
             do {
                 System.out.println("Do you want to: Guess a letter(1), or guess the word(2)?");
+
+                valid = true;
 
                 switch (sc.nextLine()) {
                     case "1": //single letter guess
@@ -196,7 +198,7 @@ public class App {
         while (true) {
             System.out.print("Make a word guess: ");
             String guess = sc.nextLine().toUpperCase();
-            if (guess.length() < theWord.length() || !checkLettering(guess)) { //invalid input
+            if (guess.length() != theWord.length() || !checkLettering(guess)) { //invalid input
                 System.out.println("\nInvalid Guess, type in the full word as a guess\n");
             } else {
                 return guess;
