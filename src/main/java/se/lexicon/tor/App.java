@@ -14,6 +14,7 @@ public class App {
             "Siobhan", "Smorgasbord", "Expedient", "Pumpkin", "Saturnus",
             "House", "Firetruck", "Washington", "Mastodon", "Godzilla",
             "Showstopper", "Method", "Jesus", "Metalhead", "Dramaqueen"};
+    private static int numberOfWords = words.length;
 
     static Scanner sc = new Scanner(System.in);
 
@@ -42,7 +43,7 @@ public class App {
     static void play(String theWord) {
 
         String upperCaseWord = theWord.toUpperCase(); //makes a more "compatible" word for usage, still prints out the normal word later
-        int guessNumber = 0, correctNumber = 0; //what guess the user is on, the index of the correct guesses array
+        int guessNumber = 0, correctNumber = 0; //what guess the user is on, and the index of the correct guesses array
         char[] correctGuesses = new char[theWord.length()]; //array with space for every correct letter as a guess
         char[] currentVisibleWord = makeInvisible(theWord); //the word is it is currently known, blank to begin with
         String[] guessedWords = new String[0]; //the guessed full words
@@ -50,7 +51,7 @@ public class App {
 
         writeCurrentVisible(currentVisibleWord, guessNumber, false);
 
-        while (guessNumber < 8) {
+        while (guessNumber < 8) { //in here the user got 8 guesses to get the word right
 
             boolean valid;
 
@@ -77,7 +78,7 @@ public class App {
                                 return;
                             }
 
-                        } else if (guesses.toString().indexOf(guessLetter) < 0) { //if the letter hasn't already been incorrectly guessed
+                        } else if (checkIfIn(guessLetter, guesses.toString())) { //if the letter hasn't already been incorrectly guessed
                             guessNumber++; //one more wrong guess
                             guesses.append(guessLetter); //then put it into wrong guesses
                         }
@@ -111,13 +112,6 @@ public class App {
         }
         return array;
     }
-
-    /*
-    static String[] register(String[] array, int index){
-
-    }
-
-    */
 
     static String pad(char[] array) {
         StringBuilder paddington = new StringBuilder();
@@ -247,7 +241,7 @@ public class App {
 
     static int randomNumber() {
         Random numberMaker = new Random();
-        int theNumber = numberMaker.nextInt(20);
+        int theNumber = numberMaker.nextInt(numberOfWords);
 
         return theNumber;
     }
