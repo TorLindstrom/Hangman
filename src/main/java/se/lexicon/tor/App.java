@@ -1,11 +1,8 @@
 package se.lexicon.tor;
 
-
-import java.lang.invoke.SwitchPoint;
 import java.util.Arrays;
 import java.util.Random;
 import java.util.Scanner;
-
 
 public class App {
 
@@ -15,27 +12,19 @@ public class App {
             "House", "Firetruck", "Washington", "Mastodon", "Godzilla",
             "Showstopper", "Method", "Jesus", "Metalhead", "Dramaqueen"};
     private static int numberOfWords = words.length;
-
     static Scanner sc = new Scanner(System.in);
 
-
     public static void main(String[] args) {
-
         run();
-
     }
 
     static void run() {
         while (true) { //keeps going for rounds
 
-            String theWord = randomWord();
             System.out.println("I have come up with a word...\n");
-            play(theWord);
+            play(randomWord());
 
-            if (!askForContinue()) { //if the user does not want to continue
-                System.out.println("Good fun playing against you, byebye");
-                break;
-            }
+            askForContinue(); //if the user does not want to continue
         }
     }
 
@@ -221,14 +210,15 @@ public class App {
         }
     }
 
-    static boolean askForContinue() {
+    static void askForContinue() {
         while (true) {
             System.out.print("Want to go again? y/n: ");
             switch (sc.nextLine().toLowerCase()) {
                 case "y":
-                    return true;
+                    return;
                 case "n":
-                    return false;
+                    System.out.println("Good fun playing against you, byebye");
+                    System.exit(0);
                 default:
                     System.out.println("\nPlease answer the question\n");
             }
