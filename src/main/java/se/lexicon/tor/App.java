@@ -77,19 +77,22 @@ public class App {
                         if (guessWord.equals(upperCaseWord)) { //win!!
                             outcome(theWord, "Won");
                             return;
-                        } else if (!checkIfIn(guessWord, guessedWords)) {
+                        }
+
+                        if (!checkIfIn(guessWord, guessedWords)) { //if the guessed word isn't in the guessed words array then count it as an incorrect guess
+                            guessNumber++;
                             guessedWords = add(guessedWords, guessWord);
                         }
-                        guessNumber++;
+
                         break;
                     default: //incorrect input
-                        System.out.println("\nYou didn't write valid input\n");
+                        System.out.println("\nYou didn't choose wisely\n");
                         valid = false;
                 }
             } while (!valid); //loop while it isn't valid input for the question
-            writeCurrentVisible(currentVisibleWord, guessNumber, true);
+            writeCurrentVisible(currentVisibleWord, guessNumber, true); //show the word as the user knows it
         }
-        outcome(theWord, "Lost");
+        outcome(theWord, "Lost"); //used up all the guesses, loss
     }
 
 
