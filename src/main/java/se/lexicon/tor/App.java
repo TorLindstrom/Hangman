@@ -55,7 +55,7 @@ public class App {
 
                     if (checkIfIn(guessLetter, upperCaseWord)) { //if the guessed letter is in the word then
 
-                        currentVisibleWord = makeVisible(currentVisibleWord, guessLetter, upperCaseWord); //updates the currently visible word
+                        makeVisible(currentVisibleWord, guessLetter, upperCaseWord); //updates the currently visible word
 
                         if (checkIfFilled(currentVisibleWord)) { //check if all of the word is filled in
                             outcome(theWord, "Won"); //if it is then it's a win
@@ -69,7 +69,7 @@ public class App {
 
                 } else if (sizeOfGuess == theWord.length()) { //full word guess
 
-                    if (guess.equals(upperCaseWord)) { //win!! if the word is the correct one
+                    if (checkIfRight(guess,theWord)) { //win!! if the word is the correct one
                         outcome(theWord, "Won");
                         return; //exits the round
                     }
@@ -91,14 +91,35 @@ public class App {
     } //end of play
 
 
-    static char[] makeVisible(char[] array, char element, String upperCaseWord) {
+    //------------------------------------ visibles --------------------------------------
+
+    static void makeVisible(char[] array, char element, String upperCaseWord) {
         for (int i = 0; i < array.length; i++) { //makes every letter that was correctly guessed visible
             if (upperCaseWord.charAt(i) == element) { //goes through the word
                 array[i] = element; //make the letter visible in the currently visible word
             }
         }
-        return array;
     }
+
+    static void writeCurrentVisible(char[] currentVisibleWord, int guessNumber, boolean showGuess) {
+        StringBuilder maker = new StringBuilder();
+        maker.append("\n---Current word---\n");
+        maker.append(pad(currentVisibleWord));
+        if (showGuess) {
+            maker.append("\n\n---Current wrong guesses: ");
+            maker.append(guessNumber);
+            maker.append("/8---\n");
+        }
+        System.out.println(maker.toString());
+    }
+
+    static char[] makeInvisible(String theWord) {
+        char[] invisible = new char[theWord.length()];
+        Arrays.fill(invisible, '_');
+        return invisible;
+    }
+
+    //------------------------------------ tools ---------------------------------
 
     static String pad(char[] array) {
         StringBuilder paddington = new StringBuilder();
@@ -116,46 +137,66 @@ public class App {
         return array;
     }
 
-    static void writeCurrentVisible(char[] currentVisibleWord, int guessNumber, boolean showGuess) {
-        StringBuilder maker = new StringBuilder();
-        maker.append("\n---Current word---\n");
-        maker.append(pad(currentVisibleWord));
-        if (showGuess) {
-            maker.append("\n\n---Current wrong guesses: ");
-            maker.append(guessNumber);
-            maker.append("/8---\n");
-        }
-        System.out.println(maker.toString());
-    }
-
     static void outcome(String theWord, String what) {
         System.out.println("---You " + what + "!!---\nThe word was: " + theWord + "\n");
         return;
     }
 
-    static boolean checkIfFilled(char[] array) {
-        for (char dash : array) {
-            if (dash == '_') {
+    //------------------------------------ randoms -------------------------------------
+
+    static String randomWord() {
+        return words[randomNumber()];
+    }
+
+    static int randomNumber() {
+        Random numberMaker = new Random();
+        int theNumber = numberMaker.nextInt(numberOfWords);
+
+        return theNumber;
+    }
+
+    //------------------------------------ user interact ---------------------------------
+
+    static void askForContinue() {
+        while (true) {
+            System.out.print("Want to go again? y/n: ");
+            switch (sc.nextLine().toLowerCase()) {
+                case "y":
+                    return;
+                case "n":
+                    System.out.println("Good fun playing against you, byebye");
+                    System.exit(0);
+                default:
+                    System.out.println("\nPlease answer the question\n");
+            }
+        }
+    }
+
+    static String getGuess(){
+
+        while (true) {
+            System.out.print("Guess either a single letter or the full word: ");
+            String word = sc.nextLine().trim().toUpperCase();
+            if (checkLettering(word)) {
+                return word;
+            } else {
+                System.out.println("\nYou can only write alphabetical characters\n");
+            }
+        }
+    }
+
+    //------------------------------------ input validation ------------------------------
+
+    static boolean checkLettering(String guess) {
+        for (int i = 0; i < guess.length(); i++) {
+            if (!Character.isAlphabetic(guess.charAt(i))) {
                 return false;
             }
         }
         return true;
     }
 
-    static char[] makeInvisible(String theWord) {
-        char[] invisible = new char[theWord.length()];
-        Arrays.fill(invisible, '_');
-        return invisible;
-    }
-
-    static boolean checkIfIn(char letter, char[] array) {
-        for (char correctChars : array) { //checks if the guessed letter is already in the correctGuesses
-            if (correctChars == letter) { //if the letter isn't in the correct guesses array then
-                return true;
-            }
-        }
-        return false; //else
-    }
+    //------------------------------------ check ifs -------------------------------------
 
     static boolean checkIfIn(char letter, String upperCaseWord) {
         for (char correctChars : upperCaseWord.toCharArray()) { //checks if the guessed letter is already in the correctGuesses
@@ -175,52 +216,17 @@ public class App {
         return false; //else
     }
 
-    static String getGuess(){
-
-        while (true) {
-            System.out.print("Guess either a single letter or the full word: ");
-            String word = sc.nextLine().trim().toUpperCase();
-            if (checkLettering(word)) {
-                return word;
-            } else {
-                System.out.println("\nYou can only write alphabetical characters\n");
-            }
-        }
-    }
-
-    static boolean checkLettering(String guess) {
-        for (int i = 0; i < guess.length(); i++) {
-            if (!Character.isAlphabetic(guess.charAt(i))) {
+    static boolean checkIfFilled(char[] array) {
+        for (char dash : array) {
+            if (dash == '_') {
                 return false;
             }
         }
         return true;
     }
 
-    static void askForContinue() {
-        while (true) {
-            System.out.print("Want to go again? y/n: ");
-            switch (sc.nextLine().toLowerCase()) {
-                case "y":
-                    return;
-                case "n":
-                    System.out.println("Good fun playing against you, byebye");
-                    System.exit(0);
-                default:
-                    System.out.println("\nPlease answer the question\n");
-            }
-        }
-    }
-
-    static String randomWord() {
-        return words[randomNumber()];
-    }
-
-    static int randomNumber() {
-        Random numberMaker = new Random();
-        int theNumber = numberMaker.nextInt(numberOfWords);
-
-        return theNumber;
+    static boolean checkIfRight(String guess, String theWord){
+        return guess.equals(theWord);
     }
 
 }
