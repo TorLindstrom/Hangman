@@ -32,7 +32,6 @@ public class App {
 
         String upperCaseWord = theWord.toUpperCase(); //makes a more "compatible" word for usage, still prints out the normal word later
         int guessNumber = 0, correctNumber = 0; //what guess the user is on, and the index of the correct guesses array
-        char[] correctGuesses = new char[theWord.length()]; //array with space for every correct letter as a guess
         char[] currentVisibleWord = makeInvisible(theWord); //the word is it is currently known, blank to begin with
         String[] guessedWords = new String[0]; //the guessed full words
         StringBuilder guesses = new StringBuilder(); //the guessed characters
@@ -55,11 +54,6 @@ public class App {
                     char guessLetter = guess.charAt(0); //askForGuessLetter();
 
                     if (checkIfIn(guessLetter, upperCaseWord)) { //if the guessed letter is in the word then
-
-                        if (!checkIfIn(guessLetter, correctGuesses)) { //if the correct guess isn't registered then
-                            correctGuesses[correctNumber] = guessLetter; //register
-                            correctNumber++; //change the index amongst the correct guesses
-                        }
 
                         currentVisibleWord = makeVisible(currentVisibleWord, guessLetter, upperCaseWord); //updates the currently visible word
 
