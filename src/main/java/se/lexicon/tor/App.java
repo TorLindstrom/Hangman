@@ -15,21 +15,20 @@ public class App {
     static Scanner sc = new Scanner(System.in);
 
     public static void main(String[] args) {
-        run();
+        runMenu();
     }
 
-    static void run() {
+    static void runMenu() {
         while (true) { //keeps going for rounds
 
             System.out.println("I have come up with a word...\n");
-            play(randomWord());
+            playGame(randomWord());
 
             askForContinue(); //if the user does not want to continue
         }
     }
 
-
-    static void play(String theWord) {
+    static void playGame(String theWord) {
 
         String upperCaseWord = theWord.toUpperCase(); //makes a more "compatible" word for usage, still prints out the normal word later
         int guessNumber = 0, correctNumber = 0; //what guess the user is on, and the index of the correct guesses array
@@ -45,10 +44,8 @@ public class App {
             boolean valid; //puts valid variable outside the do scope
 
             do {
-                //System.out.println("Do you want to: Guess a letter(1), or guess the word(2)?");
-                System.out.print("Guess either a single letter or the full word: ");
 
-                String guess = sc.nextLine().trim().toUpperCase();
+                String guess = getGuess();
                 int sizeOfGuess = guess.length();
 
                 valid = true;
@@ -184,14 +181,15 @@ public class App {
         return false; //else
     }
 
-    static String askForGuessWord(String theWord) {
+    static String getGuess(){
+
         while (true) {
-            System.out.print("Make a word guess: ");
-            String guess = sc.nextLine().toUpperCase();
-            if (guess.length() != theWord.length() || !checkLettering(guess)) { //invalid input
-                System.out.println("\nInvalid Guess, type in the full word as a guess\n");
+            System.out.print("Guess either a single letter or the full word: ");
+            String word = sc.nextLine().trim().toUpperCase();
+            if (checkLettering(word)) {
+                return word;
             } else {
-                return guess;
+                System.out.println("\nYou can only write alphabetical characters\n");
             }
         }
     }
@@ -203,18 +201,6 @@ public class App {
             }
         }
         return true;
-    }
-
-    static char askForGuessLetter() {
-        while (true) {
-            System.out.print("Make a letter guess: ");
-            char guess = Character.toUpperCase(sc.nextLine().charAt(0));
-            if (!Character.isAlphabetic(guess)) {
-                System.out.println("\nInvalid Guess, type in a letter\n");
-            } else {
-                return guess;
-            }
-        }
     }
 
     static void askForContinue() {
