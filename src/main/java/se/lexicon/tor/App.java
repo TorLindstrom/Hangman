@@ -7,7 +7,7 @@ import java.util.Scanner;
 public class App {
 
     private static String[] words = {
-            "Marauder", "Idianapolis", "Metropolis", "Cat", "Calculator",
+            "Marauder", "Indianapolis", "Metropolis", "Cat", "Calculator",
             "Siobhan", "Smorgasbord", "Expedient", "Pumpkin", "Saturnus",
             "House", "Firetruck", "Washington", "Mastodon", "Godzilla",
             "Showstopper", "Method", "Jesus", "Metalhead", "Dramaqueen"};
@@ -45,49 +45,54 @@ public class App {
             boolean valid; //puts valid variable outside the do scope
 
             do {
-                System.out.println("Do you want to: Guess a letter(1), or guess the word(2)?");
+                //System.out.println("Do you want to: Guess a letter(1), or guess the word(2)?");
+                System.out.print("Guess either a single letter or the full word: ");
+
+                String guess = sc.nextLine().trim().toUpperCase();
+                int sizeOfGuess = guess.length();
 
                 valid = true;
 
-                switch (sc.nextLine()) {
-                    case "1": //single letter guess
-                        char guessLetter = askForGuessLetter();
+                if (sizeOfGuess == 1) { //single letter guess
 
-                        if (checkIfIn(guessLetter, upperCaseWord)) { //if the guessed letter is in the word then
+                    char guessLetter = guess.charAt(0); //askForGuessLetter();
 
-                            if (!checkIfIn(guessLetter, correctGuesses)) { //if the correct guess isn't registered then
-                                correctGuesses[correctNumber] = guessLetter; //register
-                                correctNumber++; //change the index amongst the correct guesses
-                            }
+                    if (checkIfIn(guessLetter, upperCaseWord)) { //if the guessed letter is in the word then
 
-                            currentVisibleWord = makeVisible(currentVisibleWord, guessLetter, upperCaseWord); //updates the currently visible word
-
-                            if (checkIfFilled(currentVisibleWord)) { //check if all of the word is filled in
-                                outcome(theWord, "Won"); //if it is then it's a win
-                                return; //exits the round
-                            }
-
-                        } else if (checkIfIn(guessLetter, guesses.toString())) { //if the letter is wrong and hasn't already been incorrectly guessed
-                            guessNumber++; //one more wrong guess
-                            guesses.append(guessLetter); //then put it into wrong guesses
+                        if (!checkIfIn(guessLetter, correctGuesses)) { //if the correct guess isn't registered then
+                            correctGuesses[correctNumber] = guessLetter; //register
+                            correctNumber++; //change the index amongst the correct guesses
                         }
-                        break;
-                    case "2": //full word guess
-                        String guessWord = askForGuessWord(theWord); //asks for a word
-                        if (guessWord.equals(upperCaseWord)) { //win!! if the word is the correct one
-                            outcome(theWord, "Won");
+
+                        currentVisibleWord = makeVisible(currentVisibleWord, guessLetter, upperCaseWord); //updates the currently visible word
+
+                        if (checkIfFilled(currentVisibleWord)) { //check if all of the word is filled in
+                            outcome(theWord, "Won"); //if it is then it's a win
                             return; //exits the round
                         }
 
-                        if (!checkIfIn(guessWord, guessedWords)) { //if the guessed word isn't in the guessed words array then count it as an incorrect guess
-                            guessNumber++; //increase the guessed number
-                            guessedWords = add(guessedWords, guessWord); //add the guessed word into the wrong guesses so it doesn't raise the wrong guesses number next time
-                        }
-                        break;
-                    default: //incorrect input
-                        System.out.println("\nYou didn't choose wisely\n");
-                        valid = false; //loops the input and switch
+                    } else if (!checkIfIn(guessLetter, guesses.toString())) { //if the letter is wrong and hasn't already been incorrectly guessed
+                        guessNumber++; //one more wrong guess
+                        guesses.append(guessLetter); //then put it into wrong guesses
+                    }
+
+                } else if (sizeOfGuess == theWord.length()) { //full word guess
+
+                    if (guess.equals(upperCaseWord)) { //win!! if the word is the correct one
+                        outcome(theWord, "Won");
+                        return; //exits the round
+                    }
+
+                    if (!checkIfIn(guess, guessedWords)) { //if the guessed word isn't in the guessed words array then count it as an incorrect guess
+                        guessNumber++; //increase the guessed number
+                        guessedWords = add(guessedWords, guess); //add the guessed word into the wrong guesses so it doesn't raise the wrong guesses number next time
+                    }
+
+                } else { //incorrect input
+                    System.out.println("\nRemember to count how many letters there are in the word\n");
+                    valid = false; //loops the input and switch
                 }
+
             } while (!valid); //loop while it isn't valid input for the question
             writeCurrentVisible(currentVisibleWord, guessNumber, true); //show the word as the user knows it
         } //out of attempts loop
